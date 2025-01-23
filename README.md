@@ -163,10 +163,18 @@ receivers:
     email_configs:
       - to: "exemple@gmail.com"    # L'adresse email du destinataire
 ```
-### Générer un mot de passe d'application comme `smtp_auth_password`:
+### Générer un mot de passe d'application pour `smtp_auth_password`:
   - Connectez-vous à votre compte Google.
   - Accédez à Sécurité.
   - Sous "Validation en deux étapes ", sélectionnez "Mots de passe d'application".
   - Suivez les instructions pour générer un mot de passe d'application.
-    
-### Utilisez ce mot de passe dans votre configuration Alertmanager.
+
+<div align="center">
+  <img src="Password.png" alt="mot de passe d'application">
+</div><br>
+
+  - Utilisez ce mot de passe dans votre configuration Alertmanager.
+### Recevoir des alertes par mail :
+<div align="center">
+  <img src="MailAlert.png" alt="Alerts par Mail">
+</div>

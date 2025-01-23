@@ -5,11 +5,11 @@ PrProjet de Stack Monitoring avec Prometheus, Grafana et Traefik
  ``` git clone https://github.com/stefanprodan/dockprom.git ```
 
 2/ Installation des exportateurs sur les machines cibles (Node Exporter, cAdvisor) :
-- Nodeexporter :
+  - Nodeexporter :
 ```bash
 docker run -d -p 9100:9100 --name=node_exporter --privileged prom/node-exporter
 ```
--  Cadvisor :
+  -  Cadvisor :
 ```bash
 docker run -d -p 8000:8080 --name=cadvisor --privileged gcr.io/cadvisor/cadvisor
 ```
@@ -26,7 +26,7 @@ sudo nano prometheus/prometheus.yml
         - targets:             # Liste des cibles
           - "ip:port"          # Adresse IP et port de la machine à superviser
   ```
-  4/ Verification de la collecte de metriques :
+4/ Verification de la collecte de metriques :
   - Monter les contenaires:
   ```bash
   docker-compose up -d
@@ -38,3 +38,10 @@ sudo nano prometheus/prometheus.yml
   <div align="center">
   <img src="prometheus.png" alt="Prometheus Targets">
   </div>
+  
+5/ Ajouter Prometheus comme source de données pour grafana :
+  - Acceder au service grafana:
+  ```
+  http://localhost:3000
+  ```
+  - Naviger vers : ***Data Sources → Add Data Source***

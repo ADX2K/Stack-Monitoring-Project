@@ -44,4 +44,5 @@ sudo nano prometheus/prometheus.yml
   ```
   http://localhost:3000
   ```
-  - Naviger vers : ***Data Sources → Add Data Source***
+  - Naviger vers : ***Data Sources → Add Data Source →*** Chercher ***Prometheus***.
+  - Dans la section `Connection` : ajouter le lien du serveur prometheus (`http://localhost:9090`).

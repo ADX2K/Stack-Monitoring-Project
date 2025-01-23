@@ -1,5 +1,5 @@
 # Stack-Monitoring-Project
-PrProjet de Stack Monitoring avec Prometheus, Grafana et Traefik
+Projet de Stack Monitoring avec Prometheus, Grafana et Traefik
 
 1/ Clonage du répertoire Github :
  ``` git clone https://github.com/stefanprodan/dockprom.git ```
@@ -39,10 +39,27 @@ sudo nano prometheus/prometheus.yml
   <img src="prometheus.png" alt="Prometheus Targets">
   </div>
   
-5/ Ajouter Prometheus comme source de données pour grafana :
+5/ Ajout de Prometheus comme source de données pour grafana :
   - Acceder au service grafana:
   ```
   http://localhost:3000
   ```
   - Naviger vers : ***Data Sources → Add Data Source →*** Chercher ***Prometheus***.
+  <div align="center">
+  <img src="Ajouter Prometheus.png" alt="Ajouter Prometheus">
+  </div>
+  
   - Dans la section `Connection` : ajouter le lien du serveur prometheus (`http://localhost:9090`).
+  - Enregistrer les changements
+
+6/ Implementation les tableaux de boards dans grafana :
+  - Naviger vers : ***Dashboards → New → Import →*** Choisir le tableau de board.
+    
+     ****Remarque****: On peux ajouter les tableaux de boards de 2 methodes :
+     
+     - Ajout de fichier JSON approprier du tableau de board.
+     - Avec l'ID approprier du tableau de board directement.
+  - Choix de la source de données : `Prometheus`
+    
+   
+    

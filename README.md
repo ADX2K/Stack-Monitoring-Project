@@ -132,3 +132,41 @@ rule_files:
 ```yaml
 docker-compose restart prometheus
 ```
+
+<div align="center">
+  <img src="Alerts.png" alt="Alerts">
+</div>
+
+### 8. Configuration de alert manager pour l'envoi des Emails:
+#### Ouvrir le fichier de configuration :
+```bash
+nano alertmanager/config.yml
+```
+#### Ajoutez la configuration :
+```yaml
+global:
+  smtp_smarthost: 'smtp.gmail.com:587'    # Le serveur SMTP utilisé
+  smtp_from: 'exemple@gmail.com'    # L'adresse email de l'expéditeur
+  smtp_auth_username: 'username'    # Le nom d'utilisateur
+  smtp_auth_password: 'password'    # Le mot de passe pour l'authentification SMTP (configurer dans la prochaine partie)
+  smtp_require_tls: true    # Sécuriser la connexion
+
+route:
+  group_by: ['alertname']    # La methode de groupement des alertes
+  group_wait: 30s    # Le temps d'attente avant d'envoyer la première alerte groupée
+  group_interval: 5m    # L'intervalle entre les envois d'alertes groupées
+  repeat_interval: 1h    # L'intervalle de répétition des alertes
+  receiver: "email-alert"    # Le nom du récepteur des alertes
+
+receivers:
+  - name: "email-alert"
+    email_configs:
+      - to: "exemple@gmail.com"    # L'adresse email du destinataire
+```
+### Générer un mot de passe d'application comme `smtp_auth_password`:
+  - Connectez-vous à votre compte Google.
+  - Accédez à Sécurité.
+  - Sous "Validation en deux étapes ", sélectionnez "Mots de passe d'application".
+  - Suivez les instructions pour générer un mot de passe d'application.
+    
+### Utilisez ce mot de passe dans votre configuration Alertmanager.

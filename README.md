@@ -166,7 +166,7 @@ receivers:
 ### Générer un mot de passe d'application pour `smtp_auth_password`:
   - Connectez-vous à votre compte Google.
   - Accédez à Sécurité.
-  - Sous "Validation en deux étapes ", sélectionnez "Mots de passe d'application".
+  - Sous "Validation en deux étapes", sélectionnez "Mots de passe d'application" (Validation en deux étapes doit être activé).
   - Suivez les instructions pour générer un mot de passe d'application.
 
 <div align="center">

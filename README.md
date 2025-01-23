@@ -61,7 +61,7 @@ docker-compose up -d
 Ouvrez votre navigateur et rendez-vous à l'adresse suivante :  [http://localhost:9090](http://localhost:9090)
 
 <div align="center">
-  <img src="prometheus.png" alt="Prometheus Targets">
+  <img src="Images/prometheus.png" alt="Prometheus Targets">
 </div>
 
 ---
@@ -74,7 +74,7 @@ Ouvrez votre navigateur et rendez-vous à l'adresse suivante :  [http://localhos
 1. Naviguez vers **Data Sources → Add Data Source**.  
 2. Cherchez **Prometheus** dans la liste.  
 <div align="center">
-  <img src="Ajouter Prometheus.png" alt="Ajouter Prometheus">
+  <img src="Images/Ajouter Prometheus.png" alt="Ajouter Prometheus">
 </div>
 
 
@@ -96,7 +96,7 @@ Vous pouvez ajouter les tableaux de bord de deux manières :
 2. Choisissez la source de données : **Prometheus**.
 
 <div align="center">
-  <img src="Dashboard.png" alt="Tableau de bord">
+  <img src="Images/Dashboard.png" alt="Tableau de bord">
 </div>
 
 ---
@@ -134,7 +134,7 @@ docker-compose restart prometheus
 ```
 
 <div align="center">
-  <img src="Alerts.png" alt="Alerts">
+  <img src="Images/Alerts.png" alt="Alerts">
 </div>
 
 ### 8. Configuration de alert manager pour l'envoi des Emails:
@@ -170,7 +170,7 @@ receivers:
   - Suivez les instructions pour générer un mot de passe d'application.
 
 <div align="center">
-  <img src="Password.png" alt="mot de passe d'application">
+  <img src="Images/Password.png" alt="mot de passe d'application">
 </div><br>
 
   - Utilisez ce mot de passe dans votre configuration Alertmanager.

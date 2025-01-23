@@ -101,4 +101,34 @@ Vous pouvez ajouter les tableaux de bord de deux manières :
 
 ---
 
+### 7. Création des alertes :
+#### Créez le fichier d'alertes :
+```bash
+sudo nano prometheus/alerts.yml
+```
+#### Ajoutez les alertes :
+```yaml
+groups:    # Définir un groupe d'alertes 
+  - name: node_alerts    # Nom du groupe d'alertes  
+    rules:  
+      - alert: Hight CPU    # Nom de l'alerte
+        expr: 100 - (avg(rate(node_cpu_seconds_total{mode="idle"}[1m])) by (instance)) * 100 > 70    # Condition d'alerte
+        for: 1m    # Délai avant de considérer l'alerte active
+        labels:
+          severity: warning    # Niveau de gravité de l'alerte
+          resolve_automatically: true    # Automatisation de la résolution de l'alerte
+        annotations:    # Informations supplémentaires pour l'alerte
+          summary: Hight CPU usage for  {{ $labels.instance }}
+          description: The target {{ $labels.instance }} is using {{ $value }}% CPU
+```
+### Liez le fichier d'alertes dans le fichier de configuration principal :
+Ajoutez cette ligne dans `prometheus.yml` :
 
+```yaml
+rule_files:
+  - "alerts.yml"
+```
+### Redémarrez Prometheus pour appliquer les changements :
+```yaml
+docker-compose restart prometheus
+```

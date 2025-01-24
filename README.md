@@ -229,7 +229,7 @@ services:
       - "80:80"    # Port HTTP
       - "8080:8080"    # Interface de Traefik sur `http://localhost:8080`
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
+      - "/var/run/docker.sock:/var/run/docker.sock"
 ```
 
 ---
@@ -251,11 +251,86 @@ services:
       - '--web.enable-lifecycle'
     restart: unless-stopped
     labels:
-      - "traefik.enable=true"    # Autoriser les configuration Traefik
+      - "traefik.enable=true"   # Activer Traefik pour gérer ce conteneur.
       - "traefik.http.routers.prometheus.rule=Host(`prometheus.localhost`)"    # Définir la route vers le service Prometheus
 ```
-Tester les configurations:
+Verifier les configurations sur l'interface Traefik sur: [http://localhost:8080](http://localhost:8080/dashboard/#/http/routers)
+
+Tester les services sur: [http://prometheus.localhost](http://prometheus.localhost/)
+
+Appliquer les configurations sur tout les services.
+
+---
+
+### 2. Implementation de la sécurite avec Let's Encrypt:
+ - Obtention d'une certification SSL locale avec `openssl`
 ```bash
-http://prometheus.localhost
+   mkdir -p ./letsencrypt
+   openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout localhost.key -out localhost.crt -subj "/CN=localhost"    # Génèrer une clé privée RSA de 2048 bits et un certificat valide pour 365 jours
 ```
 
+ - Implementation de la configuration de HTTPS pour Traefik:
+```yaml
+  traefik:
+    image: "traefik:v3.3"
+    container_name: "traefik"
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--entryPoints.websecure.address=:443"   # Définit l'entrée pour le trafic HTTPS sur le port 443
+      - "--certificatesresolvers.myresolver.acme.tlschallenge=true"  # Activation du défi TLS pour automatisé l'obtention et le renouvellement des certificats SSL
+      - "--certificatesresolvers.myresolver.acme.storage=/letsencrypt/acme.json"  # Définit le chemin de stockage des certificats ACME
+    ports:
+      - "443:443"
+      - "8080:8080"
+    volumes:
+      - "./letsencrypt:/letsencrypt"   # Monter la certification dans le conteneurs docker
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+```
+ - Implementation de la configuration de HTTPS pour l'autres services:
+```yaml
+  prometheus:
+    image: prom/prometheus:v2.55.0
+    container_name: prometheus
+    volumes:
+      - ./prometheus:/etc/prometheus
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.prometheus.rule=Host(`prometheus.localhost`)"
+      - "traefik.http.routers.prometheus.entrypoints=websecure" # Utiliser l'entrée sécurisée HTTPS
+      - "traefik.http.routers.prometheus.tls.certresolver=myresolver"  # Utilise le résolveur de certificats pour obtenir des certificats SSL/TLS
+```
+Verifier les configurations sur l'interface Traefik sur: [http://localhost:8080](http://localhost:8080/dashboard/#/http/routers)
+
+Tester les services sur: [https://prometheus.localhost](https://prometheus.localhost/)
+
+Appliquer les configurations sur tout les services.
+
+---
+
+### 2. Activation de l'equilibrage de charge:
+Ajout la fonctionnalité `deploy` pour les services.
+```yaml
+  grafana:
+    image: grafana/grafana:11.3.0
+    # container_name: grafana    # Enlever le nom de contenaire en cas de replication d'images
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards
+      - ./grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.grafana.rule=Host(`grafana.localhost`)"
+      - "traefik.http.routers.grafana.entrypoints=websecure"
+      - "traefik.http.routers.grafana.tls.certresolver=myresolver"
+    deploy:
+      replicas: 2    # Deux instances du conteneur Grafana
+```
+   

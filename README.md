@@ -178,3 +178,84 @@ receivers:
 <div align="center">
   <img src="Images/MailAlert.png" alt="Alerts par Mail">
 </div>
+
+---
+
+## Migration vers Traefik :
+### 1. Modification des configuration du reverse proxy:
+  - Supression des configurations de caddy
+  - Ajout des configuration de Traefik
+### Ouvrir le fichier de configuration:
+```bash
+sudo nano docker-compose.yml
+```
+### Supression de la configuration de caddy:
+```yaml
+  caddy:
+    image: caddy:2.8.4
+    container_name: caddy
+    ports:
+      - "3001:3000"
+      - "8081:8080"
+      - "9094:9090"
+      - "9095:9093"
+      - "9096:9091"
+    volumes:
+      - ./caddy:/etc/caddy
+    environment:
+      - ADMIN_USER=${ADMIN_USER:-admin}
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD:-admin}
+      - ADMIN_PASSWORD_HASH=${ADMIN_PASSWORD_HASH:-$2a$14$1l.IozJx7xQRVmlkEQ32OeEEfP5mRxTpbDTCTcXRqn19gXD8YK1pO}
+    restart: unless-stopped
+    networks:
+      - monitor-net
+    labels:
+      org.label-schema.group: "monitoring"
+```
+### Supression de la configuration des ports (Traefik se base sur les routes):
+```yaml
+    expose:
+      - xxxx
+```
+### Ajout de la configuration de Traefik:
+```yaml
+services:
+  Traefik:
+    image: traefik:v3.3    # Image officielle
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+    ports:
+      - "80:80"    # Port HTTP
+      - "8080:8080"    # Interface de Traefik sur `http://localhost:8080`
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+```
+
+---
+
+### 2. Configuration du routage à travers les Labels Traefik:
+```yaml
+  prometheus:
+    image: prom/prometheus:v2.55.0
+    container_name: prometheus
+    volumes:
+      - ./prometheus:/etc/prometheus
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/etc/prometheus/console_libraries'
+      - '--web.console.templates=/etc/prometheus/consoles'
+      - '--storage.tsdb.retention.time=200h'
+      - '--web.enable-lifecycle'
+    restart: unless-stopped
+    labels:
+      - "traefik.enable=true"    # Autoriser les configuration Traefik
+      - "traefik.http.routers.prometheus.rule=Host(`prometheus.localhost`)"    # Définir la route vers le service Prometheus
+```
+Tester les configurations:
+```bash
+http://prometheus.localhost
+```
+

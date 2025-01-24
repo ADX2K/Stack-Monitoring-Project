@@ -176,5 +176,5 @@ receivers:
   - Utilisez ce mot de passe dans votre configuration Alertmanager.
 ### Recevoir des alertes par mail :
 <div align="center">
-  <img src="MailAlert.png" alt="Alerts par Mail">
+  <img src="Images/MailAlert.png" alt="Alerts par Mail">
 </div>

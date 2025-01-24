@@ -266,7 +266,8 @@ Appliquer les configurations sur tout les services.
  - Obtention d'une certification SSL locale avec `openssl`
 ```bash
    mkdir -p ./letsencrypt
-   openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout localhost.key -out localhost.crt -subj "/CN=localhost"    # Génèrer une clé privée RSA de 2048 bits et un certificat valide pour 365 jours
+   openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout localhost.key -out localhost.crt -subj "/CN=localhost"
+   # Génèrer une clé privée RSA de 2048 bits et un certificat valide pour 365 jours
 ```
 
  - Implementation de la configuration de HTTPS pour Traefik:

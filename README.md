@@ -16,12 +16,28 @@ Configurez les outils **Node Exporter** et **cAdvisor** pour collecter les métr
 
 #### - Node Exporter :
 ```bash
-docker run -d -p 9100:9100 --name=node_exporter --privileged prom/node-exporter
+docker run -d \                                                   
+  --net="host" \
+  --pid="host" \
+  -v "/:/host:ro,rslave" \
+  quay.io/prometheus/node-exporter:latest \
+  --path.rootfs=/host
+
 ```
 
 #### - cAdvisor :
 ```bash
-docker run -d -p 8000:8080 --name=cadvisor --privileged gcr.io/cadvisor/cadvisor
+sudo docker run \                                                               
+   --volume=/:/rootfs:ro \
+   --volume=/var/run:/var/run:ro \
+   --volume=/sys:/sys:ro \
+   --volume=/var/lib/docker/:/var/lib/docker:ro \
+   --volume=/dev/disk/:/dev/disk:ro \
+   --publish=8000:8080 \
+   --detach=true \
+   --name=cadvisor \
+   gcr.io/cadvisor/cadvisor
+
 ```
 
 #### - Pushgateway :

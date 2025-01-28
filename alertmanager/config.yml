@@ -1,0 +1,18 @@
+global:
+  smtp_smarthost: 'smtp.gmail.com:587'
+  smtp_from: 'adelaiouaz3@gmail.com'
+  smtp_auth_username: 'adelaiouaz3@gmail.com'
+  smtp_auth_password: 'quvxpbinyqdxnrqh'
+  smtp_require_tls: true
+
+route:
+  group_by: ['alertname']
+  group_wait: 30s
+  group_interval: 5m
+  repeat_interval: 1h
+  receiver: "email-alert"
+
+receivers:
+  - name: "email-alert"
+    email_configs:
+      - to: "adelaiouaz1919@gmail.com"

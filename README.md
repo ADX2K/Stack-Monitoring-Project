@@ -16,7 +16,14 @@ Configurez les outils **Node Exporter** et **cAdvisor** pour collecter les métr
 
 #### - Node Exporter :
 ```bash
-docker run -d -p 9100:9100 --name=node_exporter --privileged prom/node-exporter
+
+docker run -d \
+  --net="host" \
+  --pid="host" \
+  -v "/:/host:ro,rslave" \
+  quay.io/prometheus/node-exporter:latest \
+  --path.rootfs=/host
+
 ```
 
 #### - cAdvisor :
@@ -37,7 +44,10 @@ sudo docker run \
 
 #### - Pushgateway :
 ```bash
-docker run -d -p 9091:9091 --name=pushgateway --privileged prom/pushgateway
+
+docker pull prom/pushgateway
+docker run -d -p 9091:9091 prom/pushgateway
+
 ```
 
 ---

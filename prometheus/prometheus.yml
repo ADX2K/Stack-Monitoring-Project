@@ -30,5 +30,3 @@ scrape_configs:
 rule_files:
   - "alerting_rules.yml"
 
-
-#test

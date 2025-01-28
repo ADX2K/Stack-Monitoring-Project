@@ -27,3 +27,5 @@ scrape_configs:
       - targets: 
         - "pushgateway:9091"
         - "192.168.1.100:9091"
+rule_files:
+  - "alerting_rules.yml"

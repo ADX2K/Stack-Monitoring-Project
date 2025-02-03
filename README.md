@@ -3,6 +3,7 @@ Stack Monitoring Project with Prometheus, Grafana, and Traefik.
 <div align="center">
   <img src="Images/Architecture.png" alt="Project Architecture">
 </div>
+
 ## Installation and Configuration Steps
 
 ### 1. Cloning the GitHub Repository

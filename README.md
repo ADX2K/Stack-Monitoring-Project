@@ -356,6 +356,7 @@ Adding `deploy` functionality for services.
 ```yaml
   grafana:
     image: grafana/grafana:11.3.0
+    # container_name: grafana    # Remove this label for replicas
     volumes:
       - grafana_data:/var/lib/grafana
       - ./grafana/provisioning/dashboards:/etc/grafana/provisioning/dashboards

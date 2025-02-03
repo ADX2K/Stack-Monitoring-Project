@@ -1,9 +1,9 @@
 global:
-  smtp_smarthost: 'smtp.gmail.com:587'
-  smtp_from: 'adelaiouaz3@gmail.com'
-  smtp_auth_username: 'ADX2K'
-  smtp_auth_password: 'quvxpbinyqdxnrqh'
-  smtp_require_tls: true
+  smtp_smarthost: 'smtp.gmail.com:587'  # SMTP server
+  smtp_from: 'example@gmail.com'  # Sender email address
+  smtp_auth_username: 'username'  # Username
+  smtp_auth_password: 'password'  # SMTP authentication password
+  smtp_require_tls: true  # Secure connection
 
 route:
   group_by: ['alertname']
@@ -15,4 +15,4 @@ route:
 receivers:
   - name: "email-alert"
     email_configs:
-      - to: "adelaiouaz1919@gmail.com"
+      - to: "example@gmail.com"  # Recipient email address
